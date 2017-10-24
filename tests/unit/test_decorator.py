@@ -17,7 +17,7 @@ class BaseDecoratorTestCase(TestCase):
         self.basil = Ingredient.objects.create(name='basil', price=Decimal('0.50'))
         self.cheese = Ingredient.objects.create(name='cheese', price=Decimal('1.00'))
         self.milk = Ingredient.objects.create(name='milk', price=Decimal('0.10'))
-        self.beef = Ingredient.objects.create(name='milk', price=Decimal('2.50'))
+        self.beef = Ingredient.objects.create(name='beef', price=Decimal('2.50'))
 
 
 class DecoratorBasicTests(BaseDecoratorTestCase):

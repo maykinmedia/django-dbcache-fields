@@ -4,6 +4,7 @@ import logging
 
 from django.core.exceptions import FieldError
 from django.db.models import Field
+from django.utils.six import string_types
 from qualname import qualname
 
 logger = logging.getLogger()
@@ -65,7 +66,7 @@ class dbcache(object):
             field name) that should return ``True`` if the field value should
             be recalculated using the original method.
         """
-        if isinstance(field, str):
+        if isinstance(field, string_types):
             if field_name is not None:
                 raise ValueError('The dbcache field_name argument must be None when referring to an existing field.')
             field_name = field
@@ -73,7 +74,7 @@ class dbcache(object):
         else:
             if not isinstance(field, Field):
                 raise FieldError(
-                    'The dbcache field argument should be a Django Field instance or existing field name.')
+                    'The dbcache field argument should be a Django Field instance or existing field name')
             elif not field.blank or not field.null:
                 raise FieldError('The dbcache field should have blank=True and null=True.')
 
