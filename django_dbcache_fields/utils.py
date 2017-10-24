@@ -1,4 +1,4 @@
-from __future__ import unicode_literals
+from __future__ import absolute_import, unicode_literals
 
 import logging
 
@@ -72,7 +72,8 @@ class dbcache(object):
             field = None
         else:
             if not isinstance(field, Field):
-                raise FieldError('The dbcache field argument should be a Django Field instance or existing field name.')
+                raise FieldError(
+                    'The dbcache field argument should be a Django Field instance or existing field name.')
             elif not field.blank or not field.null:
                 raise FieldError('The dbcache field should have blank=True and null=True.')
 

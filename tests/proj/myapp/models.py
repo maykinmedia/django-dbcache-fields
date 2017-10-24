@@ -1,3 +1,5 @@
+from __future__ import absolute_import, unicode_literals
+
 from decimal import Decimal
 
 from django.db import models
@@ -61,6 +63,7 @@ class Wrap(BaseDish):
         ingredients_price = self.ingredients.aggregate(total=Sum('price'))['total'] or Decimal()
 
         return self.base_price + ingredients_price
+
 
 # Use with existing field
 class Salad(BaseDish):
