@@ -30,7 +30,7 @@ Installation
 You can install django_dbcache_fields either via the Python Package Index
 (PyPI) or from source.
 
-To install using `pip`,:
+To install using `pip`:
 
 .. code-block:: console
 
@@ -48,10 +48,12 @@ To use this with your project you need to follow these steps:
       $ pip install django_dbcache_fields
 
 #. Add ``django_dbcache_fields`` to ``INSTALLED_APPS`` in your Django
-   project's ``settings.py``::
+   project's ``settings.py``:
+
+   .. code-block:: python
 
     INSTALLED_APPS = (
-        ...,
+        # ...,
         'django_dbcache_fields',
     )
 
@@ -63,7 +65,9 @@ To use this with your project you need to follow these steps:
 Example
 =======
 
-Simple example to show what ``dbcache`` does::
+Simple example to show what ``dbcache`` does:
+
+.. code-block:: python
 
     from django.db import models
     from django_dbcache_fields.utils import dbcache
