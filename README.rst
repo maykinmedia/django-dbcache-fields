@@ -7,7 +7,7 @@ DBCache Fields for Django
 :Source: https://github.com/maykinmedia/django-dbcache-fields
 :Keywords: django, database, cache, methods, decorator
 
-|build-status| |coverage|
+|build-status| |coverage| |license| |pyversion| |djversion|
 
 About
 =====
@@ -80,7 +80,8 @@ Simple example to show what ``dbcache`` does:
         name = models.CharField(max_length=100)
         ingredients = models.ManyToManyField(Ingredient)
 
-        @dbcache(models.DecimalField(max_digits=6, decimal_places=2, blank=True, null=True))
+        @dbcache(models.DecimalField(max_digits=6, decimal_places=2,
+                blank=True, null=True), invalidated_by=['myapp.Ingredient'])
         def get_price(self):
             return self.ingredients.aggregate(total=Sum('price'))['total'] or Decimal()
 
@@ -97,3 +98,15 @@ need to perform the same query over and over again.
 
 .. |coverage| image:: https://codecov.io/github/maykinmedia/django-dbcache-fields/coverage.svg?branch=master
     :target: https://codecov.io/github/maykinmedia/django-dbcache-fields?branch=master
+
+.. |license| image:: https://img.shields.io/pypi/l/django-dbcache-fields.svg
+    :alt: BSD License
+    :target: https://opensource.org/licenses/BSD-3-Clause
+
+.. |pyversion| image:: https://img.shields.io/pypi/pyversions/django-dbcache-fields.svg
+    :alt: Supported Python versions
+    :target: http://pypi.python.org/pypi/django_dbcache_fields/
+
+.. |djversion| image:: https://img.shields.io/badge/django-1.8%2C%201.9%2C%201.10%2C%201.11-blue.svg
+    :alt: Supported Django versions
+    :target: http://pypi.python.org/pypi/django_dbcache_fields/

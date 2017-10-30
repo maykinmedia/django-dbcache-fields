@@ -38,9 +38,33 @@ class Register(object):
                 self._invalidation_model_store[model][class_path].add(field_name)
 
     def get(self, class_path):
+        """
+        Returns a `list` of information about `dbcache` decorated methods.
+
+        :param class_path:
+            The `Model` class path.
+        :return:
+            A `list` of `dict` with the following keys:
+                - decorated_method
+                - field
+                - field_name
+                - dirty_func
+                - invalidated_by
+        """
         return self._model_store.get(class_path, [])
 
-    def get_model_fields_to_invalidate(self, model):
+    def get_related_models(self, model):
+        """
+        Returns a `dict` of models related to the `dbcache` decorated method.
+        Typically used to see which models and fields should be invalidated
+        when a related model is changed
+
+        :param model:
+            The model name in the form '{app label}.{model name}'.
+        :return:
+            A `dict` where each key is the affected model class path. The
+            value is a `list` of field names that are affected.
+        """
         return self._invalidation_model_store.get(model, {})
 
     def __contains__(self, class_path):
@@ -54,16 +78,16 @@ class dbcache(object):
 
     def __init__(self, field, field_name=None, dirty_func=None, invalidated_by=None):
         """
-        Decorate a class method on a Django ``Model`` to store the result of
+        Decorate a class method on a Django `Model` to store the result of
         that method in the database.
 
         :param field:
-            Django ``Model`` ``Field`` instance to store the result.
+            Django `Model` `Field` instance to store the result.
         :param field_name:
-            The field name of the ``Field`` instance.
+            The field name of the `Field` instance.
         :param dirty_func:
-            A function that takes 2 arguments (the ``Model`` instance and the
-            field name) that should return ``True`` if the field value should
+            A function that takes 2 arguments (the `Model` instance and the
+            field name) that should return `True` if the field value should
             be recalculated using the original method.
         """
         if isinstance(field, string_types):
@@ -77,6 +101,9 @@ class dbcache(object):
                     'The dbcache field argument should be a Django Field instance or existing field name')
             elif not field.blank or not field.null:
                 raise FieldError('The dbcache field should have blank=True and null=True.')
+
+        if dirty_func and dirty_func.__code__.co_argcount < 2:
+            raise TypeError('The dirty function "{}" should accept at least 2 arguments.'.format(dirty_func.__name__))
 
         self.field = field
         self.field_name = field_name
@@ -114,19 +141,40 @@ class dbcache(object):
 
             instance = args[0]
 
-            # If ``None`` is an actual valid value, this causes the decorated
+            # If `None` is an actual valid value, this causes the decorated
             # method to always call the original method.
-            value = getattr(instance, field_name, None)
-            if not use_dbcache or value is None:
+            cached_value = getattr(instance, field_name, None)
+            if not use_dbcache or cached_value is None:
                 # Call original method.
                 value = f(*args, **kwargs)
 
-                # Update database field for next call and to store when saved.
-                setattr(instance, field_name, value)
-                logger.debug('{}.{} updated dbcache field ("{}") and returned actual method value: {}'.format(
-                    class_path, func_name, field_name, value
+                logger.debug('{}.{} call returned: {}'.format(
+                    class_path, func_name, value
                 ))
+
+                if value != cached_value:
+                    # Update database field for next call and to store when saved.
+                    setattr(instance, field_name, value)
+                    logger.debug('{}.{} updated and returned dbcache field ("{}") value: {}'.format(
+                        class_path, func_name, field_name, value
+                    ))
+
+                    # TODO: Not sure if this is the right approach. Saving
+                    # when calling a method is not really nice design.
+
+                    # Update the database only if the instance already has a PK.
+                    if instance.pk:
+                        logger.debug('{}.{} updated dbcache field ("{}") in the database: {}'.format(
+                            class_path, func_name, field_name, value
+                        ))
+                        # WARNING: This causes a database update query when
+                        # calling a method that most likely does not imply
+                        # such behaviour (like: Model.get_FOO).
+                        #
+                        # Bypass triggers by using update
+                        instance.__class__.objects.filter(pk=instance.pk).update(**{field_name: value})
             else:
+                value = cached_value
                 logger.debug('{}.{} returned dbcache field ("{}") value: {}'.format(
                     class_path, func_name, field_name, value
                 ))

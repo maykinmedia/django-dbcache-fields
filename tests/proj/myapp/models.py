@@ -28,7 +28,6 @@ class Pizza(BaseDish):
     @dbcache(models.DecimalField(max_digits=6, decimal_places=2, blank=True, null=True))
     def get_price(self):
         ingredients_price = self.ingredients.aggregate(total=Sum('price'))['total'] or Decimal()
-
         return self.base_price + ingredients_price
 
 
@@ -50,19 +49,33 @@ class Lasagna(BaseDish):
              dirty_func=is_base_price_changed)
     def get_price(self):
         ingredients_price = self.ingredients.aggregate(total=Sum('price'))['total'] or Decimal()
-
         return self.base_price + ingredients_price
 
 
 # Use with invalidated_by
+class WrapType(models.Model):
+    type_name = models.CharField(max_length=100, choices=[('cold', 'cold'), ('hot', 'hot'), ])
+    price = models.DecimalField(max_digits=4, decimal_places=2)
+
+
 class Wrap(BaseDish):
+    wrap_type = models.ForeignKey(WrapType, null=True, on_delete=models.SET_NULL)
 
     @dbcache(models.DecimalField(max_digits=6, decimal_places=2, blank=True, null=True),
-             invalidated_by=['myapp.Ingredient'])
+             invalidated_by=['myapp.Ingredient', 'myapp.WrapType', 'myapp.WrapPromo'])
     def get_price(self):
-        ingredients_price = self.ingredients.aggregate(total=Sum('price'))['total'] or Decimal()
+        promo = self.wrappromo_set.first()
+        if promo:
+            return promo.promo_price
 
-        return self.base_price + ingredients_price
+        ingredients_price = self.ingredients.aggregate(total=Sum('price'))['total'] or Decimal()
+        type_price = self.wrap_type.price if self.wrap_type else Decimal()
+        return self.base_price + type_price + ingredients_price
+
+
+class WrapPromo(models.Model):
+    wrap = models.ForeignKey(Wrap)
+    promo_price = models.DecimalField(max_digits=6, decimal_places=2)
 
 
 # Use with existing field
@@ -72,5 +85,4 @@ class Salad(BaseDish):
     @dbcache('price')
     def get_price(self):
         ingredients_price = self.ingredients.aggregate(total=Sum('price'))['total'] or Decimal()
-
         return self.base_price + ingredients_price
