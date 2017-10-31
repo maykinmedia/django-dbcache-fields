@@ -1,6 +1,6 @@
-=========================
-DBCache Fields for Django
-=========================
+=====================
+Django DBCache Fields
+=====================
 
 :Version: 0.9.0
 :Download: https://pypi.python.org/pypi/django_dbcache_fields
@@ -27,7 +27,7 @@ cached value is only updated when the model is saved.
 Installation
 ============
 
-You can install django_dbcache_fields either via the Python Package Index
+You can install `django_dbcache_fields` either via the Python Package Index
 (PyPI) or from source.
 
 To install using `pip`:
@@ -59,7 +59,7 @@ To use this with your project you need to follow these steps:
 
    Note that there is no dash in the module name, only underscores.
 
-#. All done. You can now decorate methods in your ``Model``s with
+#. All done. You can now decorate methods in your ``Model`` with
    ``@dbcache``.
 
 Example
@@ -70,7 +70,7 @@ Simple example to show what ``dbcache`` does:
 .. code-block:: python
 
     from django.db import models
-    from django_dbcache_fields.utils import dbcache
+    from django_dbcache_fields.decorators import dbcache
 
     class Ingredient(models.Model):
         name = models.CharField(max_length=100)
@@ -81,7 +81,7 @@ Simple example to show what ``dbcache`` does:
         ingredients = models.ManyToManyField(Ingredient)
 
         @dbcache(models.DecimalField(max_digits=6, decimal_places=2,
-                blank=True, null=True), invalidated_by=['myapp.Ingredient'])
+                 blank=True, null=True), invalidated_by=['myapp.Ingredient'])
         def get_price(self):
             return self.ingredients.aggregate(total=Sum('price'))['total'] or Decimal()
 
