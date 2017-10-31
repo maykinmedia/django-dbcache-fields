@@ -132,12 +132,12 @@ parameter of the `dbcache` decorator. This causes the following behaviour:
     >>> pizza.base_price = Decimal(5)
     >>> pizza.save()  # The cached field will be updated
     >>> pizza.get_total_price()
-    Decimal('6')  # Remember 1 euro was added for the pizza type calzone
+    Decimal('6')
 
     >>> pizza.pizza_type = 'regular'
     >>> pizza.save()  # The cached field will not be updated
     >>> pizza.get_total_price()
-    Decimal('11')  # The old price is still used
+    Decimal('11')
 
 Note that in the last example, the total price is **not** correct. The cached
 value was not invalidated due to an incomplete *dirty* function. The *dirty*

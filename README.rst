@@ -3,6 +3,7 @@ Django DBCache Fields
 =====================
 
 :Version: 0.9.0
+:Docs: https://django-dbcache-fields.readthedocs.io/
 :Download: https://pypi.python.org/pypi/django_dbcache_fields
 :Source: https://github.com/maykinmedia/django-dbcache-fields
 :Keywords: django, database, cache, methods, decorator
