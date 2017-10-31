@@ -10,6 +10,7 @@ include setup.cfg
 include setup.py
 include manage.py
 include tox.ini
+recursive-include docs *
 recursive-include requirements *.txt
 recursive-include tests *.py
 recursive-exclude * __pycache__
