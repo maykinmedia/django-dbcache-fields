@@ -6,7 +6,7 @@ from django.core.exceptions import FieldError
 from django.db import models
 from django.test import TestCase
 
-from django_dbcache_fields.utils import dbcache
+from django_dbcache_fields.decorators import dbcache
 
 
 class DecoratorTestCase(TestCase):

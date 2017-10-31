@@ -1,26 +1,14 @@
 from __future__ import absolute_import, unicode_literals
 
-import inspect
 import logging
 
 from django.db.models.signals import post_save
 from django.utils.module_loading import import_string
 
-from .utils import register
+from . import register
+from .utils import get_class_path, get_model_name
 
 logger = logging.getLogger()
-
-
-def get_class_path(instance):
-    return '{}.{}'.format(
-        instance.__module__,
-        instance.__name__ if inspect.isclass(instance) else instance.__class__.__name__)
-
-
-def get_model_name(instance):
-    return '{}.{}'.format(
-        instance._meta.app_label,
-        instance.__name__ if inspect.isclass(instance) else instance.__class__.__name__)
 
 
 def update_dbcache_fields(sender, instance, **kwargs):

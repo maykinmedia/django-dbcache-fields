@@ -5,7 +5,7 @@ from decimal import Decimal
 from django.db import models
 from django.db.models import Sum
 
-from django_dbcache_fields.utils import dbcache
+from django_dbcache_fields.decorators import dbcache
 
 
 class Ingredient(models.Model):

@@ -10,6 +10,8 @@ import re
 
 from collections import namedtuple
 
+from .utils import Register
+
 __version__ = '0.9.0'
 __author__ = 'Joeri Bekker'
 __contact__ = 'joeri@maykinmedia.nl'
@@ -31,6 +33,8 @@ VERSION = version_info = version_info_t(
 del(_temp)
 del(re)
 
-__all__ = []
+__all__ = ['register', ]
 
 default_app_config = 'django_dbcache_fields.apps.DBCacheFieldsConfig'
+
+register = Register()
