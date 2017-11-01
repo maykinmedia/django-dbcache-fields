@@ -84,9 +84,6 @@ def update_models(sender, **kwargs):
             # Field name should not exists already, we're adding it.
             field.contribute_to_class(sender, field_name)
             field_names.append(field_name)
-        else:
-            # Field name should exists already
-            pass
 
     logger.debug('{} model was updated with dbcache decorated fields: {}.'.format(
         sender_model_name, ', '.join(field_names)))
@@ -102,14 +99,15 @@ def invalidate_dbcache_fields_by_fks(sender, instance, **kwargs):
     # One model can affect multiple other models.
     for class_path, field_names in register.get_related_models(instance_model_name).items():
         update_kwargs = dict([(field_name, None) for field_name in field_names])
-        if update_kwargs:
-            model_class = import_string(class_path)
-            logger.debug('Saving "{}" (pk={}) triggered the invalidation of "{}" for fields: {}'.format(
-                instance_model_name, instance.pk, class_path, ', '.join(field_names)
-            ))
-            # Set all fields on this model to `None` if they are affected by
-            # the invalidation.
-            model_class.objects.update(**update_kwargs)
+        assert update_kwargs, 'There should always be some fields to update'
+
+        model_class = import_string(class_path)
+        logger.debug('Saving "{}" (pk={}) triggered the invalidation of "{}" for fields: {}'.format(
+            instance_model_name, instance.pk, class_path, ', '.join(field_names)
+        ))
+        # Set all fields on this model to `None` if they are affected by
+        # the invalidation.
+        model_class.objects.update(**update_kwargs)
 
 
 def invalidate_dbcache_fields_by_m2m(sender, instance, action, reverse, model, **kwargs):
@@ -134,10 +132,11 @@ def invalidate_dbcache_fields_by_m2m(sender, instance, action, reverse, model, *
     for class_path, field_names in register.get_related_models(model_name).items():
         if instance_class_path == class_path:
             update_kwargs = dict([(field_name, None) for field_name in field_names])
-            if update_kwargs:
-                logger.debug('{} "{}" triggered the invalidation of "{}" (pk={}) for fields: {}'.format(
-                    actions.get(action, action), model, model_name, instance.pk, ', '.join(field_names)
-                ))
-                # Set all fields on this model to `None` if they are affected
-                # by the invalidation.
-                instance.__class__.objects.filter(pk=instance.pk).update(**update_kwargs)
+            assert update_kwargs, 'There should always be some fields to update'
+
+            logger.debug('{} "{}" triggered the invalidation of "{}" (pk={}) for fields: {}'.format(
+                actions.get(action, action), model, model_name, instance.pk, ', '.join(field_names)
+            ))
+            # Set all fields on this model to `None` if they are affected
+            # by the invalidation.
+            instance.__class__.objects.filter(pk=instance.pk).update(**update_kwargs)

@@ -7,7 +7,7 @@ from decimal import Decimal
 from django.db.models import Sum
 from django.test import TestCase
 
-from tests.proj.myapp.models import Ingredient, Lasagna, Pizza, Salad, Wrap, WrapPromo, WrapType
+from tests.proj.myapp.models import Drink, Ingredient, Lasagna, Pizza, Salad, Wrap, WrapPromo, WrapType
 
 
 class BaseDecoratorTestCase(TestCase):
@@ -102,8 +102,19 @@ class DecoratorBasicTests(BaseDecoratorTestCase):
 
         self.assertEqual(self.dish._get_price_cached, Decimal('12.75'))
 
-    def test_call_method_with_use_dbcache_false(self):
+    def test_call_method_with_use_dbcache_false_with_filled_cache(self):
         self.dish._get_price_cached = Decimal('15.00')
+
+        with self.assertNumQueries(2):
+            # 1 query for the aggregate within the get_price function,
+            # 1 query for the update of the cached field.
+            result = self.dish.get_price(use_dbcache=False)
+
+        self.assertEqual(result, Decimal('12.75'))
+        self.assertEqual(self.dish._get_price_cached, Decimal('12.75'))
+
+    def test_call_method_with_use_dbcache_false_with_empty_cache(self):
+        self.dish._get_price_cached = None
 
         with self.assertNumQueries(2):
             # 1 query for the aggregate within the get_price function,
@@ -172,6 +183,15 @@ class DecoratorBasicTests(BaseDecoratorTestCase):
         # And it's saved in the database.
         pizza.refresh_from_db()
         self.assertEqual(pizza._get_price_cached, Decimal('10.00'))
+
+    def test_call_method_on_unsaved_instance(self):
+        drink = Drink(name='cola', base_price=Decimal('2.00'))
+
+        with self.assertNumQueries(0):
+            result = drink.get_price()
+
+        self.assertEqual(result, Decimal('2.00'))
+        self.assertEqual(drink._get_price_cached, Decimal('2.00'))
 
 
 class DecoratorFieldNameTests(BaseDecoratorTestCase):

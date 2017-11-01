@@ -12,6 +12,16 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.AddField(
+            model_name='drink',
+            name='_get_name_cached',
+            field=models.CharField(null=True, max_length=100, blank=True),
+        ),
+        migrations.AddField(
+            model_name='drink',
+            name='_get_price_cached',
+            field=models.DecimalField(null=True, max_digits=6, decimal_places=2, blank=True),
+        ),
+        migrations.AddField(
             model_name='lasagna',
             name='_get_price_cached',
             field=models.DecimalField(null=True, max_digits=6, decimal_places=2, blank=True),

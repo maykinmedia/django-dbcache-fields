@@ -22,6 +22,21 @@ class BaseDish(models.Model):
         abstract = True
 
 
+# Simplistic case
+class Drink(models.Model):
+    name = models.CharField(max_length=100)
+    base_price = models.DecimalField(max_digits=5, decimal_places=2)
+
+    @dbcache(models.DecimalField(max_digits=6, decimal_places=2, blank=True, null=True))
+    def get_price(self):
+        return self.base_price
+
+    # Multiple dbcache decorators on the same Model.
+    @dbcache(models.CharField(max_length=100, blank=True, null=True))
+    def get_name(self):
+        return self.name
+
+
 # Basic use
 class Pizza(BaseDish):
 
@@ -61,8 +76,9 @@ class WrapType(models.Model):
 class Wrap(BaseDish):
     wrap_type = models.ForeignKey(WrapType, null=True, on_delete=models.SET_NULL)
 
+    # Also intentionally added WrapDemo twice.
     @dbcache(models.DecimalField(max_digits=6, decimal_places=2, blank=True, null=True),
-             invalidated_by=['myapp.Ingredient', 'myapp.WrapType', 'myapp.WrapPromo'])
+             invalidated_by=['myapp.Ingredient', 'myapp.WrapType', 'myapp.WrapPromo', 'myapp.WrapPromo'])
     def get_price(self):
         promo = self.wrappromo_set.first()
         if promo:
