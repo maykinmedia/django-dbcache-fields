@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
-from __future__ import absolute_import, unicode_literals
+from __future__ import unicode_literals
 
-import django.db.models.deletion
 from django.db import migrations, models
+import django.db.models.deletion
 
 
 class Migration(migrations.Migration):
@@ -66,6 +66,18 @@ class Migration(migrations.Migration):
         ),
         migrations.CreateModel(
             name='Wrap',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('name', models.CharField(max_length=100)),
+                ('base_price', models.DecimalField(max_digits=5, decimal_places=2)),
+                ('ingredients', models.ManyToManyField(to='myapp.Ingredient')),
+            ],
+            options={
+                'abstract': False,
+            },
+        ),
+        migrations.CreateModel(
+            name='WrapDeluxe',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('name', models.CharField(max_length=100)),

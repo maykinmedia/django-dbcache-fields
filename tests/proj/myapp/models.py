@@ -88,10 +88,28 @@ class Wrap(BaseDish):
         type_price = self.wrap_type.price if self.wrap_type else Decimal()
         return self.base_price + type_price + ingredients_price
 
+    # Multiple dbcache fields using the same invalidated by model.
+    @dbcache(models.CharField(max_length=100, blank=True, null=True),
+             invalidated_by=['myapp.WrapPromo', ])
+    def get_promo_text(self):
+        promo = self.wrappromo_set.first()
+        if not promo:
+            return 'Awwww, no promotion at this time'
+        return 'Now, only EUR {:.2f}'.format(promo.promo_price)
+
 
 class WrapPromo(models.Model):
     wrap = models.ForeignKey(Wrap)
     promo_price = models.DecimalField(max_digits=6, decimal_places=2)
+
+
+class WrapDeluxe(BaseDish):
+    # Same invalidated_by model on different models.
+    @dbcache(models.DecimalField(max_digits=6, decimal_places=2, blank=True, null=True),
+             invalidated_by=['myapp.Ingredient', ])
+    def get_price(self):
+        ingredients_price = self.ingredients.aggregate(total=Sum('price'))['total'] or Decimal()
+        return self.base_price + ingredients_price
 
 
 # Use with existing field

@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""Admin index for Django."""
+"""Django DBCache Fields"""
 # :copyright: (c) 2017, Maykin Media BV.
 #             All rights reserved.
 # :license:   BSD (3 Clause), see LICENSE for more details.

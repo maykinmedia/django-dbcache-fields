@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from __future__ import absolute_import, unicode_literals
+from __future__ import unicode_literals
 
 from django.db import migrations, models
 
@@ -14,7 +14,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='drink',
             name='_get_name_cached',
-            field=models.CharField(null=True, max_length=100, blank=True),
+            field=models.CharField(max_length=100, null=True, blank=True),
         ),
         migrations.AddField(
             model_name='drink',
@@ -33,6 +33,16 @@ class Migration(migrations.Migration):
         ),
         migrations.AddField(
             model_name='wrap',
+            name='_get_price_cached',
+            field=models.DecimalField(null=True, max_digits=6, decimal_places=2, blank=True),
+        ),
+        migrations.AddField(
+            model_name='wrap',
+            name='_get_promo_text_cached',
+            field=models.CharField(max_length=100, null=True, blank=True),
+        ),
+        migrations.AddField(
+            model_name='wrapdeluxe',
             name='_get_price_cached',
             field=models.DecimalField(null=True, max_digits=6, decimal_places=2, blank=True),
         ),
