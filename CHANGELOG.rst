@@ -11,8 +11,8 @@ Change history
 * Expose `dbcache` via `django_dbcache_fields.decorators`.
 
 
-0.9
-===
+0.9.0
+=====
 
 *October 30, 2017*
 
