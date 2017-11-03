@@ -8,7 +8,7 @@ Django DBCache Fields
 :Source: https://github.com/maykinmedia/django-dbcache-fields
 :Keywords: django, database, cache, methods, decorator
 
-|build-status| |coverage| |license| |pyversion| |djversion|
+|build-status| |coverage| |lintly| |license| |pyversion| |djversion|
 
 About
 =====
@@ -100,14 +100,18 @@ need to perform the same query over and over again.
 .. |coverage| image:: https://codecov.io/github/maykinmedia/django-dbcache-fields/coverage.svg?branch=master
     :target: https://codecov.io/github/maykinmedia/django-dbcache-fields?branch=master
 
+.. |lintly| image:: https://lintly.com/gh/maykinmedia/django-dbcache-fields/badge.svg
+    :target: https://lintly.com/gh/maykinmedia/django-dbcache-fields/
+    :alt: Lintly
+
 .. |license| image:: https://img.shields.io/pypi/l/django-dbcache-fields.svg
     :alt: BSD License
     :target: https://opensource.org/licenses/BSD-3-Clause
 
 .. |pyversion| image:: https://img.shields.io/pypi/pyversions/django-dbcache-fields.svg
     :alt: Supported Python versions
-    :target: http://pypi.python.org/pypi/django_dbcache_fields/
+    :target: http://pypi.python.org/pypi/django-dbcache-fields/
 
 .. |djversion| image:: https://img.shields.io/badge/django-1.8%2C%201.9%2C%201.10%2C%201.11-blue.svg
     :alt: Supported Django versions
-    :target: http://pypi.python.org/pypi/django_dbcache_fields/
+    :target: http://pypi.python.org/pypi/django-dbcache-fields/
