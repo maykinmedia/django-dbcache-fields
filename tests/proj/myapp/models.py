@@ -99,7 +99,7 @@ class Wrap(BaseDish):
 
 
 class WrapPromo(models.Model):
-    wrap = models.ForeignKey(Wrap)
+    wrap = models.ForeignKey(Wrap, on_delete=models.CASCADE)
     promo_price = models.DecimalField(max_digits=6, decimal_places=2)
 
 
