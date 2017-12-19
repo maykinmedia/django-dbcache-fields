@@ -112,6 +112,6 @@ need to perform the same query over and over again.
     :alt: Supported Python versions
     :target: http://pypi.python.org/pypi/django-dbcache-fields/
 
-.. |djversion| image:: https://img.shields.io/badge/django-1.8%2C%201.9%2C%201.10%2C%201.11-blue.svg
+.. |djversion| image:: https://img.shields.io/badge/django-1.8%2C%201.9%2C%201.10%2C%201.11%2C%202.0-blue.svg
     :alt: Supported Django versions
     :target: http://pypi.python.org/pypi/django-dbcache-fields/
