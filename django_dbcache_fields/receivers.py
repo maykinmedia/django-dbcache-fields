@@ -8,7 +8,7 @@ from django.utils.module_loading import import_string
 from . import register
 from .utils import get_class_path, get_model_name
 
-logger = logging.getLogger()
+logger = logging.getLogger(__name__)
 
 
 def update_dbcache_fields(sender, instance, **kwargs):
