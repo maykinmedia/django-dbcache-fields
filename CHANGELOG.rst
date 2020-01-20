@@ -5,7 +5,9 @@ Change history
 0.9.3
 =====
 
-*Unreleased*
+*January, 20, 2020*
+
+* Changed root-level logging to package level.
 
 
 0.9.2

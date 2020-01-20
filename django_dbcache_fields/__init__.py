@@ -11,7 +11,7 @@ from collections import namedtuple
 
 from .utils import Register
 
-__version__ = '0.9.2'
+__version__ = '0.9.3'
 __author__ = 'Joeri Bekker'
 __contact__ = 'joeri@maykinmedia.nl'
 __homepage__ = 'https://github.com/maykinmedia/django-dbcache-fields'

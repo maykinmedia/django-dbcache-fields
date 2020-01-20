@@ -4,8 +4,7 @@
  API Reference
 ===============
 
-:Release: |version|
-:Date: |today|
+:Release: |release|
 
 .. toctree::
     :maxdepth: 1

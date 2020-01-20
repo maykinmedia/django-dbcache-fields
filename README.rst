@@ -2,13 +2,13 @@
 Django DBCache Fields
 =====================
 
-:Version: 0.9.2
+:Version: 0.9.3
 :Docs: https://django-dbcache-fields.readthedocs.io/
 :Download: https://pypi.python.org/pypi/django_dbcache_fields
 :Source: https://github.com/maykinmedia/django-dbcache-fields
 :Keywords: django, database, cache, methods, decorator
 
-|build-status| |coverage| |lintly| |license| |pyversion| |djversion|
+|build-status| |coverage| |license| |pyversion| |djversion|
 
 About
 =====
@@ -99,10 +99,6 @@ need to perform the same query over and over again.
 
 .. |coverage| image:: https://codecov.io/github/maykinmedia/django-dbcache-fields/coverage.svg?branch=master
     :target: https://codecov.io/github/maykinmedia/django-dbcache-fields?branch=master
-
-.. |lintly| image:: https://lintly.com/gh/maykinmedia/django-dbcache-fields/badge.svg
-    :target: https://lintly.com/gh/maykinmedia/django-dbcache-fields/
-    :alt: Lintly
 
 .. |license| image:: https://img.shields.io/pypi/l/django-dbcache-fields.svg
     :alt: BSD License
