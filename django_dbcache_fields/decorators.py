@@ -9,7 +9,7 @@ from qualname import qualname
 
 from . import register
 
-logger = logging.getLogger()
+logger = logging.getLogger(__name__)
 
 
 class dbcache(object):
